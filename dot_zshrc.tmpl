@@ -1,0 +1,38 @@
+# Path to Oh My Zsh installation
+export ZSH="$HOME/.oh-my-zsh"
+
+# --- Oh My ZSH Settings ---
+
+# Theme
+ZSH_THEME="turtle"
+
+# Plugins
+plugins=(
+  zsh-autosuggestions
+	zsh-syntax-highlighting
+	fzf-tab
+	sudo
+	extract
+	copypath
+	copyfile
+	colored-man-pages
+	docker
+	docker-compose
+)
+
+# Show a reminder for updates to Oh My Zsh
+zstyle ':omz:update' mode reminder
+# Faster git status by ignoring untracked files
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Load Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+
+# --- Shared Aliases ---
+alias cl="clear"
+
+# --- Local Host Overrides ---
+# Safely source uncommitted, machine-specific variables
+if [ -f "$HOME/.zshrc.local" ]; then
+  source "$HOME/.zshrc.local"
+fi
