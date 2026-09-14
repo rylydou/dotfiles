@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Guard: the Oh My Zsh installer only respects --keep-zshrc when ~/.zshrc
+# already exists. If it is missing, the installer falls through and writes
+# its default template (ZSH_THEME="robbyrussell", plugins=(git)), which would
+# be sourced after ~/.zshrc.shared and silently override it.
+# run_once_before_bootstrap_zshrc.sh normally creates ~/.zshrc first; this is
+# a belt-and-braces fallback.
+touch "$HOME/.zshrc"
+
 # 1. Install Oh My Zsh unattended if missing
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "Installing Oh My Zsh..."

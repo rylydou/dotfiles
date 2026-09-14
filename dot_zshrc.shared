@@ -11,6 +11,7 @@ plugins=(
   zsh-autosuggestions
 	zsh-syntax-highlighting
 	fzf-tab
+	z
 	sudo
 	extract
 	copypath
@@ -25,14 +26,10 @@ zstyle ':omz:update' mode reminder
 # Faster git status by ignoring untracked files
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Load Oh My Zsh
-source $ZSH/oh-my-zsh.sh
+# Load Oh My Zsh (guarded: may not be installed yet on a fresh machine)
+if [ -f "$ZSH/oh-my-zsh.sh" ]; then
+  source "$ZSH/oh-my-zsh.sh"
+fi
 
 # --- Shared Aliases ---
 alias cl="clear"
-
-# --- Local Host Overrides ---
-# Safely source uncommitted, machine-specific variables
-if [ -f "$HOME/.zshrc.local" ]; then
-  source "$HOME/.zshrc.local"
-fi
