@@ -7,11 +7,11 @@ fi
 
 PROMPT='
 '
-PROMPT+='%B%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})'"$TURTLE_ID"' %{$fg_bold[white]%}%~$(git_prompt_info) %{%F{8}%}%t%{%f%}%b%{$reset_color%}
+PROMPT+='%B%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})'"$TURTLE_ID"' %{$fg_bold[white]%}%~$(git_prompt_info) %{%F{8}%}%D{%-I:%M%p}%{%f%}%b%{$reset_color%}
 %{$reset_color%}'
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg_bold[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_PREFIX=" %{%F{8}%}(%{$fg_bold[cyan]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}%{%F{8}%})%{%f%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=""
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
