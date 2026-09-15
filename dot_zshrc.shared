@@ -31,5 +31,24 @@ if [ -f "$ZSH/oh-my-zsh.sh" ]; then
   source "$ZSH/oh-my-zsh.sh"
 fi
 
+
+# --- ZSH Settings ---
+
+# Share history across all sessions
+setopt share_history
+
+# Expire duplicate entries first when trimming history
+setopt hist_expire_dups_first
+
+# Do not write duplicate entries to the history file
+setopt hist_ignore_dups
+
+# Remove older duplicates from history when adding a new unique command
+setopt hist_ignore_all_dups
+
+# Do not display a line if it is a duplicate of one just entered
+setopt hist_find_no_dups
+
+
 # --- Shared Aliases ---
 alias cl="clear"
