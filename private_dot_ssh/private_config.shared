@@ -1,0 +1,11 @@
+# Shared SSH defaults. Managed by chezmoi
+#
+# SSH uses first-match-wins for every keyword, so ~/.ssh/config Includes this
+# file at the *end* — anything defined locally takes precedence over the
+# defaults below.
+
+# Try to wake rylys-pc before connecting using Wake on LAN.
+Host rylys-pc
+    HostName rylys-pc
+    User ryly
+    ProxyCommand curl -fsS "http://wolnet.local:8778/api/wake/%h" >/dev/null || true; exec nc %h %p
