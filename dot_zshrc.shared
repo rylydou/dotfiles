@@ -52,3 +52,4 @@ setopt hist_find_no_dups
 
 # --- Shared Aliases ---
 alias cl="clear"
+alias reload="source ~/.zshrc"
