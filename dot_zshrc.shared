@@ -84,3 +84,11 @@ wake() {
     echo "$1 is on"
   fi
 }
+
+# Pull dotfiles, update Oh My Zsh, then reload the shell.
+update() {
+  chezmoi update || return
+  # Restarts the shell itself if Oh My Zsh changed, so reload only runs if it didn't
+  omz update || return
+  reload
+}
