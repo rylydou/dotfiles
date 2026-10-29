@@ -16,10 +16,25 @@ set -eu
 # a belt-and-braces fallback.
 touch "$HOME/.zshrc"
 
-# 1. Install Oh My Zsh unattended if missing
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
+# 1. Install Oh My Zsh unattended if missing.
+#    Check for oh-my-zsh.sh, not the directory: chezmoi creates
+#    ~/.oh-my-zsh/custom (dot_oh-my-zsh) before this script runs, so the
+#    directory always exists on a fresh machine. The installer refuses to run
+#    if ~/.oh-my-zsh exists, so move the managed custom files aside, install,
+#    then put them back.
+OMZ="$HOME/.oh-my-zsh"
+if [ ! -f "$OMZ/oh-my-zsh.sh" ]; then
   echo "Installing Oh My Zsh..."
+  CUSTOM_TMP="$HOME/.oh-my-zsh-custom.tmp"
+  if [ -d "$OMZ/custom" ]; then
+    mv "$OMZ/custom" "$CUSTOM_TMP"
+  fi
+  rmdir "$OMZ" 2>/dev/null || true
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
+  if [ -d "$CUSTOM_TMP" ]; then
+    cp -a "$CUSTOM_TMP/." "$OMZ/custom/"
+    rm -rf "$CUSTOM_TMP"
+  fi
 fi
 
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
