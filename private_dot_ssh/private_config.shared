@@ -5,7 +5,8 @@
 # defaults below.
 
 # Try to wake rylys-pc before connecting using Wake on LAN.
+# Wrapped in sh -c because ssh runs ProxyCommand as "exec <command>".
 Host rylys-pc
     HostName rylys-pc
     User ryly
-    ProxyCommand curl -fsS "http://wolnet.local:8778/api/wake/%h" >/dev/null || true; exec nc %h %p
+    ProxyCommand sh -c 'curl -fsS "http://truenas:8778/api/wake/%h" >/dev/null || true; exec nc %h %p'
