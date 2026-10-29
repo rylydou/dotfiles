@@ -1,13 +1,14 @@
 # Show user@host only on remote (SSH) sessions, otherwise a plain $
+# Green on success, red on error. On SSH it's highlighted (black text on green/red).
 if [[ -n "$SSH_CONNECTION$SSH_CLIENT$SSH_TTY" ]]; then
-  TURTLE_ID='%n@%m'
+  TURTLE_ID='%(?:%K{green}:%K{red})%F{black} %n@%m %f%k'
 else
-  TURTLE_ID='$'
+  TURTLE_ID='%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})$'
 fi
 
 PROMPT='
 '
-PROMPT+='%B%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})'"$TURTLE_ID"' %{$fg_bold[white]%}%~$(git_prompt_info) %{%F{8}%}%D{%-I:%M%p}%{%f%}%b%{$reset_color%}
+PROMPT+='%B'"$TURTLE_ID"' %{$fg_bold[white]%}%~$(git_prompt_info) %{%F{8}%}%D{%-I:%M%p}%{%f%}%b%{$reset_color%}
 %{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{%F{8}%}(%{$fg_bold[cyan]%}"
