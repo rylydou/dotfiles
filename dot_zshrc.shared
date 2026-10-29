@@ -53,3 +53,34 @@ setopt hist_find_no_dups
 # --- Shared Aliases ---
 alias cl="clear"
 alias reload="source ~/.zshrc"
+
+
+# --- Shared Functions ---
+
+# Wake a device with WolNet (on truenas) and wait until it's online.
+# Usage: wake <hostname or MAC>
+wake() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: wake <hostname or MAC>" >&2
+    return 1
+  fi
+
+  echo "Waking $1..."
+  local response code body
+  # WolNet holds the request open until the device answers (up to 2 minutes)
+  response=$(curl -sS -w '\n%{http_code}' "http://truenas:8778/api/wake/$1") || return 1
+  code=${response##*$'\n'}
+  body=${response%$'\n'*}
+
+  if [[ $code != 200 ]]; then
+    # Errors look like {"message":"..."}
+    echo "$body" | sed -e 's/.*"message":"\(.*\)"}.*/\1/' -e 's/\\"/"/g' >&2
+    return 1
+  fi
+
+  if [[ $body == *'"alreadyOnline":true'* ]]; then
+    echo "$1 was already on"
+  else
+    echo "$1 is on"
+  fi
+}
