@@ -66,23 +66,19 @@ wake() {
   fi
 
   echo "Waking $1..."
-  local response code body
+  local response code message
   # WolNet holds the request open until the device answers (up to 2 minutes)
   response=$(curl -sS -w '\n%{http_code}' "http://truenas:8778/api/wake/$1") || return 1
   code=${response##*$'\n'}
-  body=${response%$'\n'*}
+  # Every answer has a "message", like {"message":"rylys-pc is awake.", ...}
+  message=$(echo "${response%$'\n'*}" | sed -nE 's/.*"message":"(([^"\\]|\\.)*)".*/\1/p' | sed 's/\\"/"/g')
 
-  if [[ $code != 200 ]]; then
-    # Errors look like {"message":"..."}
-    echo "$body" | sed -e 's/.*"message":"\(.*\)"}.*/\1/' -e 's/\\"/"/g' >&2
+  if [[ $code != 2* ]]; then
+    echo "${message:-WolNet answered $code}" >&2
     return 1
   fi
 
-  if [[ $body == *'"alreadyOnline":true'* ]]; then
-    echo "$1 was already on"
-  else
-    echo "$1 is on"
-  fi
+  echo "${message:-$1 is on}"
 }
 
 # Pull dotfiles, update Oh My Zsh, then reload the shell.
